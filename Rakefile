@@ -5,41 +5,51 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "acts_as_tree_rails3"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "kmandrup@gmail.com"
-    gem.homepage = "http://github.com/kristianmandrup/acts_as_tree_rails3"
-    gem.authors = ["Kristian Mandrup"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.summary = %Q{Make your model act as a tree structure}
+    gem.description = %Q{Model gets: root, siblings, ancestors, descendants and other methods for tree navigation}
+    gem.email = "jim@saturnflyer.com"
+    gem.homepage = "http://github.com/saturnflyer/acts_as_tree"
+    gem.authors = ["David Heinemeier Hansson",'and others']
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-require 'spec/rake/spectask'
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/*_test.rb'
+  test.verbose = true
 end
 
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+begin
+  require 'rcov/rcovtask'
+  Rcov::RcovTask.new do |test|
+    test.libs << 'test'
+    test.pattern = 'test/**/*_test.rb'
+    test.verbose = true
+  end
+rescue LoadError
+  task :rcov do
+    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
+  end
 end
 
-task :spec => :check_dependencies
+task :test => :check_dependencies
 
-task :default => :spec
+task :default => :test
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  if File.exist?('VERSION')
+    version = File.read('VERSION')
+  else
+    version = ""
+  end
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "acts_as_tree_rails3 #{version}"
+  rdoc.title = "acts_as_tree #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
