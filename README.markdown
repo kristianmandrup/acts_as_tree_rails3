@@ -5,6 +5,7 @@ association. This requires that you have a foreign key column, which by default 
 
 ## Generate a database migration
 
+In terminal:
 <code>rails g model Category name:string parent_id:integer</code>
 
 Should generate a migration
@@ -28,6 +29,7 @@ Should generate a migration
 
 ## Migrate the database
 
+In terminal:
 <code>rake db:migrate</code>
 
 Should create the database table called 'categories'.
@@ -38,8 +40,9 @@ Should create the database table called 'categories'.
   class Category < ActiveRecord::Base
     acts_as_tree :order => "name"
   end
+</pre>
 
-## 
+## Creaete a Seed file to seed the database with tree data (nodes)
 
 <pre>  # db/seed.rb
 
@@ -50,6 +53,7 @@ Should create the database table called 'categories'.
 
 ## Seed the database!
 
+In terminal:
 <code>rake db:seed</code>
 
 ## API usage
